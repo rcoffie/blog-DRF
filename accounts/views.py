@@ -4,7 +4,7 @@ from posts.serializers import PostSerializer, CommentSerializer,CategorySerializ
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from accounts.permissions import AuthUserPost
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from accounts.serializers import RegistrationSerializer
 from django.contrib.auth.models import User
 from rest_framework.response import Response
@@ -38,6 +38,7 @@ def registration_view(request):
 
 
 @api_view(['POST',])
+@permission_classes([IsAuthenticated])
 def logout_view(request):
     if request.method == 'POST':
         request.user.auth_token.delete()
@@ -53,6 +54,7 @@ def logout_view(request):
 class CreatePostView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
