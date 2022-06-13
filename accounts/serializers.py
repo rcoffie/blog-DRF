@@ -1,5 +1,7 @@
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from posts.models import Post
+
 
 
 class RegistrationSerializer(serializers.ModelSerializer):
@@ -28,3 +30,9 @@ class RegistrationSerializer(serializers.ModelSerializer):
         account.save()
 
         return account
+
+
+# class PostSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Post
+#         fields = ['']

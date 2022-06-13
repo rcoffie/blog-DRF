@@ -12,10 +12,22 @@ class CategorySerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ["title", "author", "body", "categories"]
+        fields = ["id","title", "author", "body", "categories"]
+
+        extra_kwargs = {
+        'author': {'read_only': True},
+        'id': {'read_only': True}
+        }
 
 
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
         fields = ["author", "body", "post"]
+
+# 
+# class PostSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Post
+#         fields = '__all__'
+#         read_only_fields = ('id','author','create_on','last_modified')

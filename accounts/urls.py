@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.authtoken.views import obtain_auth_token
 
-from accounts.views import AuthorPost, AuthorPostDetail, logout_view, registration_view
+from accounts.views import AuthorPost, AuthorPostDetail, logout_view, registration_view, CreatePostView
 
 app_name = "accounts"
 
@@ -12,4 +12,5 @@ urlpatterns = [
     # path('register/',RegisterView.as_view()),
     path("register/", registration_view, name="register"),
     path("logout/", logout_view, name="logout"),
+    path("create-post/",CreatePostView.as_view())
 ]
