@@ -23,7 +23,9 @@ class AuthorPostDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [AuthUserPost]
-#
+
+    
+#NOTICE WILLL NEED TO RETURN USER TOKEN AFTER USER REGISTER
 @api_view(['POST',])
 def registration_view(request):
     if request.method == 'POST':
