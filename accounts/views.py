@@ -6,7 +6,7 @@ from posts.serializers import (CategorySerializer, CommentSerializer,
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from accounts.permissions import AuthUserPost
@@ -16,9 +16,15 @@ from accounts.serializers import RegistrationSerializer
 
 
 class AuthorPost(generics.ListCreateAPIView):
-    queryset = Post.objects.all()
+    # queryset = Post.objects.all()
     serializer_class = PostSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user 
+        return Post.objects.filter(author=user)
+
+
 
 
 class AuthorPostDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -63,6 +69,8 @@ def logout_view(request):
 # creating post
 
 
+
+
 class CreatePostView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -70,3 +78,8 @@ class CreatePostView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+class AddCategoryView(generics.ListCreateAPIView):
+    queryset = Comment.objects.all()
+    serializer_class = CategorySerializer
+    permission_classes = [IsAdminUser]

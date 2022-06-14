@@ -9,4 +9,5 @@ urlpatterns = [
     path("post-detail/<int:pk>/", PostDetail.as_view(), name="post_detail"),
     path("create-post/<int:pk>/comment/",CreateComment.as_view(),name="create_post-comment"),
     path("post/<int:pk>/comment/", PostCommentList.as_view(), name="post-comment-list"),
+
 ]
