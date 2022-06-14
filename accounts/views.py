@@ -1,15 +1,17 @@
-from django.shortcuts import render
-from posts. models import Post, Comment , Category
-from posts.serializers import PostSerializer, CommentSerializer,CategorySerializer
-from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
-from accounts.permissions import AuthUserPost
-from rest_framework.decorators import api_view, permission_classes
-from accounts.serializers import RegistrationSerializer
 from django.contrib.auth.models import User
-from rest_framework.response import Response
+from django.shortcuts import render
+from posts.models import Category, Comment, Post
+from posts.serializers import (CategorySerializer, CommentSerializer,
+                               PostSerializer)
+from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
-from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+
+from accounts.permissions import AuthUserPost
+from accounts.serializers import RegistrationSerializer
+
 # Create your views here.
 
 
@@ -25,10 +27,14 @@ class AuthorPostDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [AuthUserPost]
 
 
-#NOTICE WILLL NEED TO RETURN USER TOKEN AFTER USER REGISTER
-@api_view(['POST',])
+# NOTICE WILLL NEED TO RETURN USER TOKEN AFTER USER REGISTER
+@api_view(
+    [
+        "POST",
+    ]
+)
 def registration_view(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         serializer = RegistrationSerializer(data=request.data)
         if serializer.is_valid():
             account = serializer.save()
@@ -37,19 +43,25 @@ def registration_view(request):
             return Response(serializer.data)
 
 
-@api_view(['POST',])
+@api_view(
+    [
+        "POST",
+    ]
+)
 @permission_classes([IsAuthenticated])
 def logout_view(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
+
 
 # class RegisterView(generics.ListCreateAPIView):
 #     queryset = User.objects.all()
 #     serializer_class = RegistrationSerializer
 
 
-#creating post
+# creating post
+
 
 class CreatePostView(generics.ListCreateAPIView):
     queryset = Post.objects.all()

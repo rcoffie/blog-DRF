@@ -22,13 +22,14 @@ class CreateComment(generics.CreateAPIView):
     serializer_class = CommentSerializer
 
     def perform_create(self, serializer):
-        pk = self.kwargs.get('pk')
+        pk = self.kwargs.get("pk")
         post = Post.objects.get(pk=pk)
         serializer.save(post=post)
+
 
 class PostCommentList(generics.ListAPIView):
     serializer_class = CommentSerializer
 
     def get_queryset(self):
-        pk = self.kwargs['pk']
+        pk = self.kwargs["pk"]
         return Comment.objects.filter(post=pk)

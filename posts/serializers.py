@@ -12,12 +12,9 @@ class CategorySerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     class Meta:
         model = Post
-        fields = ["id","title", "author", "body", "categories"]
+        fields = ["id", "title", "author", "body", "categories"]
 
-        extra_kwargs = {
-        'author': {'read_only': True},
-        'id': {'read_only': True}
-        }
+        extra_kwargs = {"author": {"read_only": True}, "id": {"read_only": True}}
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -25,7 +22,8 @@ class CommentSerializer(serializers.ModelSerializer):
         model = Comment
         fields = ["author", "body", "post"]
 
-# 
+
+#
 # class PostSerializer(serializers.ModelSerializer):
 #     class Meta:
 #         model = Post
