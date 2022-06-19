@@ -8,6 +8,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from accounts.permissions import AuthUserPost
 from accounts.serializers import RegistrationSerializer
@@ -21,7 +22,7 @@ class AuthorPost(generics.ListCreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        user = self.request.user 
+        user = self.request.user
         return Post.objects.filter(author=user)
 
 
@@ -42,11 +43,28 @@ class AuthorPostDetail(generics.RetrieveUpdateDestroyAPIView):
 def registration_view(request):
     if request.method == "POST":
         serializer = RegistrationSerializer(data=request.data)
+
+        data = {}
+
         if serializer.is_valid():
             account = serializer.save()
+            data['response'] = 'Registration Successful!'
+            data['username'] = account.username
+            data['email'] = account.email
 
-            Token.objects.get_or_create(user=account)
-            return Response(serializer.data)
+
+            # Token.objects.get_or_create(user=account)
+            # return Response(serializer.data)
+
+            refresh = RefreshToken.for_user(account)
+            data['token'] = {
+            'refresh':str(refresh),
+            'access': str(refresh.access_token),
+            }
+        else:
+            data = serializer.errors
+
+        return Response(data)
 
 
 @api_view(
