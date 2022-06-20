@@ -33,3 +33,10 @@ class PostCommentList(generics.ListAPIView):
     def get_queryset(self):
         pk = self.kwargs["pk"]
         return Comment.objects.filter(post=pk)
+
+class FilterCategoryList(generics.ListAPIView):
+    serializer_class = PostSerializer
+
+    def get_queryset(self):
+        category = self.kwargs['category']
+        return Post.objects.filter(categories__name=category)
