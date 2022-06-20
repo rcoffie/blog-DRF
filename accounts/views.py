@@ -1,12 +1,11 @@
 from django.contrib.auth.models import User
 from django.shortcuts import render
 from posts.models import Category, Comment, Post
-from posts.serializers import (CategorySerializer, CommentSerializer,
-                               PostSerializer)
+from posts.serializers import CategorySerializer, CommentSerializer, PostSerializer
 from rest_framework import generics, status
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.tokens import RefreshToken
 
@@ -24,8 +23,6 @@ class AuthorPost(generics.ListCreateAPIView):
     def get_queryset(self):
         user = self.request.user
         return Post.objects.filter(author=user)
-
-
 
 
 class AuthorPostDetail(generics.RetrieveUpdateDestroyAPIView):
@@ -48,18 +45,17 @@ def registration_view(request):
 
         if serializer.is_valid():
             account = serializer.save()
-            data['response'] = 'Registration Successful!'
-            data['username'] = account.username
-            data['email'] = account.email
-
+            data["response"] = "Registration Successful!"
+            data["username"] = account.username
+            data["email"] = account.email
 
             # Token.objects.get_or_create(user=account)
             # return Response(serializer.data)
 
             refresh = RefreshToken.for_user(account)
-            data['token'] = {
-            'refresh':str(refresh),
-            'access': str(refresh.access_token),
+            data["token"] = {
+                "refresh": str(refresh),
+                "access": str(refresh.access_token),
             }
         else:
             data = serializer.errors
@@ -87,8 +83,6 @@ def logout_view(request):
 # creating post
 
 
-
-
 class CreatePostView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
@@ -96,6 +90,7 @@ class CreatePostView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
 
 class AddCategoryView(generics.ListCreateAPIView):
     queryset = Comment.objects.all()
