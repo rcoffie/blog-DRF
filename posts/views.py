@@ -1,7 +1,6 @@
 from django.shortcuts import render
-from rest_framework import generics
-from rest_framework import filters
 from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, generics
 
 from posts.models import Category, Comment, Post
 from posts.serializers import CategorySerializer, CommentSerializer, PostSerializer
@@ -13,7 +12,7 @@ class PostList(generics.ListAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title','categories__name']
+    search_fields = ["title", "categories__name"]
 
 
 class PostDetail(generics.RetrieveAPIView):
@@ -38,9 +37,10 @@ class PostCommentList(generics.ListAPIView):
         pk = self.kwargs["pk"]
         return Comment.objects.filter(post=pk)
 
+
 class FilterCategoryList(generics.ListAPIView):
     serializer_class = PostSerializer
 
     def get_queryset(self):
-        category = self.kwargs['category']
+        category = self.kwargs["category"]
         return Post.objects.filter(categories__name=category)
