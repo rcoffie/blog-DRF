@@ -4,6 +4,7 @@ from rest_framework import filters, generics
 
 from posts.models import Category, Comment, Post
 from posts.serializers import CategorySerializer, CommentSerializer, PostSerializer
+from .pagination import PostPageLimit
 
 # Create your views here.
 
@@ -13,6 +14,7 @@ class PostList(generics.ListAPIView):
     serializer_class = PostSerializer
     filter_backends = [filters.SearchFilter]
     search_fields = ["title", "categories__name"]
+    pagination_class = PostPageLimit
 
 
 class PostDetail(generics.RetrieveAPIView):
